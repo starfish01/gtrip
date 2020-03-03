@@ -5,6 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/../vendor/autoload.php';
+
 use Goutte\Client;
 
 $client = new Client();
@@ -23,6 +24,10 @@ $listItems[] = $crawler->filter('.user-ad-row')->each(function ($node, $i) {
     $item['title'] = $node->filter('.user-ad-row__title')->text();
     $item['url'] = $node->attr('href');
     $item['id'] = md5($item['url']);
+    $item['createdAt'] = $node->filter('.user-ad-row__age')->text();
+    $item['location'] = $node->filter('.user-ad-row__location .user-ad-row__location-area')->text();
+    $item['distance'] = $node->filter('.user-ad-row__location .user-ad-row__distance')->text();
+    $item['suburb'] = str_replace($item['distance'], '', str_replace($item['location'], '', $node->filter('.user-ad-row__location')->text()));
 
     return $item;
 });
