@@ -43,10 +43,10 @@ foreach ($listItems as $item) {
     }
 }
 
+phpinfo();
 
-
-header('Content-type: application/json');
-echo json_encode([
-    'result' => array_values($foundItems),
-    'error' => null
-]);
+// header('Content-type: application/json');
+// echo json_encode([
+//     'result' => array_values($foundItems),
+//     'error' => null
+// ]);

@@ -1,2 +1,4 @@
 // run server in terminal
 // php -S localhost:8000
+
+C:\Users\patri\Documents\github\gtrip\gtripProject\artisan schedule:run
