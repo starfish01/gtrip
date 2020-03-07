@@ -25,8 +25,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('scrapeSearch')->everyMinute();
-        $schedule->call('App\Http\Controllers\testTableController@store')->everyMinute();
+        // $schedule->command('scrapeSearch')->everyMinute();
+        // $schedule->call('App\Http\Controllers\testTableController@store')->everyMinute();
+        $schedule->call('App\Http\Controllers\GumTreeRipperController@getGumtreeData')->everyMinute();
     }
 
     /**
@@ -36,7 +37,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

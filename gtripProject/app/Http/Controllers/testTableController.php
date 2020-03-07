@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\testtable;
 use Illuminate\Http\Request;
+use Goutte\Client;
+use Symfony\Component\HttpClient\HttpClient;
 
 class testTableController extends Controller
 {
@@ -35,17 +37,20 @@ class testTableController extends Controller
      */
     public function store()
     {
-        //
-        echo 'hi';
-// Project::create($attributes);
-testtable::create([
-    'title' => 'title',
-    'body' => 'body'
-]);
 
-        // $this->create([
-        //     'body' => 'hi'
-        // ]);
+
+        // $client = new Client();
+        // $crawler = $client->request('GET', 'https://www.symfony.com/blog/');
+        // $client = new Client(HttpClient::create(['timeout' => 60]));
+        // $crawler->filter('h2 > a')->each(function ($node) {
+        //     print $node->text() . "\n";
+        // });
+
+        testtable::create([
+            // 'id' => '836c57b7f3136732d49b9cca4a63461e',
+            'title' => 'title',
+            'body' => 'body'
+        ]);
     }
 
     /**

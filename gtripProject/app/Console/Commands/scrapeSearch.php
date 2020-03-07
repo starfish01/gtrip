@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\GumTreeRipperController;
 use App\Http\Controllers\testTableController;
 use Illuminate\Console\Command;
 use App\testtable;
@@ -14,7 +15,7 @@ class scrapeSearch extends Command
      * @var string
      */
     protected $signature = 'command:scrapeSearch';
-    
+
     /**
      * The console command description.
      *
@@ -41,6 +42,8 @@ class scrapeSearch extends Command
     {
         //
         testTableController::store();
+        // GumTreeRipperController::store();
+
         echo 'hi';
     }
 }

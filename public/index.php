@@ -10,7 +10,7 @@ use Goutte\Client;
 
 $client = new Client();
 
-$products = ['tv', 'dyson'];
+$products = ['tv', 'dyson', 'shed'];
 $listItems = [];
 $foundItems = [];
 
@@ -43,10 +43,10 @@ foreach ($listItems as $item) {
     }
 }
 
-phpinfo();
+// phpinfo();
 
-// header('Content-type: application/json');
-// echo json_encode([
-//     'result' => array_values($foundItems),
-//     'error' => null
-// ]);
+header('Content-type: application/json');
+echo json_encode([
+    'result' => array_values($foundItems),
+    'error' => null
+]);
