@@ -44,9 +44,6 @@ class GumTreeRipperController extends Controller
      */
     public function store($newItems)
     {
-        //
-        // $newItems = $this->getGumtreeData();
-
 
         foreach ($newItems as $item) {
             GumTreeRipper::create([
@@ -108,7 +105,7 @@ class GumTreeRipperController extends Controller
 
     public function getGumtreeData()
     {
-        $products = ['mattress'];
+        $products = ['mattress', 'free'];
         $listItems = [];
         $foundItems = [];
 
@@ -164,29 +161,27 @@ class GumTreeRipperController extends Controller
         // get items from db marked not sent
         // might be this DB::table('gumtree_item')->('email_sent', false)->get();
         $itemsToEmail = GumTreeRipper::where('email_sent', false)->get();
-        
-        
+
         if (count($itemsToEmail) === 0) {
             return;
         }
 
-        GumTreeRipper::where('email_sent', '=' , 'false')->update(['email_sent' => true]);
-        
+        GumTreeRipper::where('email_sent', false)->update(['email_sent' => true]);
+
         $message = '';
 
         // format into a message
         foreach ($itemsToEmail as $item) {
 
-            $url = 'https://www.gumtree.com.au'.$item['url'];
-            
-            $message += '<p>'. $item['title'] .'</p>';
-            $message += '<p>'. "<a href='" . $url . "' target='_blank'> Open Listing </a>" .'</p>';
-            $message += '<p>'. $item['createdAt'] .'</p>';
-            $message += '<p>'. $item['location'] .'</p>';
-            $message += '<p>'. $item['distance'] .'</p>';
-            $message += '<p>'. $item['suburb'] .'</p>';
-            $message += '<br/>';
+            $url = 'https://www.gumtree.com.au' . $item['url'];
 
+            $message .= '<p>' . $item['title'] . '</p>';
+            $message .= '<p>' . "<a href='" . $url . "' target='_blank'> Open Listing </a>" . '</p>';
+            $message .= '<p>' . $item['createdAt'] . '</p>';
+            $message .= '<p>' . $item['location'] . '</p>';
+            $message .= '<p>' . $item['distance'] . '</p>';
+            $message .= '<p>' . $item['suburb'] . '</p>';
+            $message .= '<hr>';
         }
 
         $mj = new \Mailjet\Client(getenv('MAILJET_APIKEY'), getenv('MAILJET_APISECRET'), true, ['version' => 'v3.1']);
@@ -204,14 +199,15 @@ class GumTreeRipperController extends Controller
                         ]
                     ],
                     'Subject' => "Deals Found",
-                    'HTMLPart' => $message
+                    'HTMLPart' => $message,
                 ]
             ]
         ];
 
         $response = $mj->post(Resources::$Email, ['body' => $body]);
         // Read the response
-        $response->success() && var_dump($response->getData());
+        $response->success();
+        // && var_dump($response->getData());
     }
 
     public function getDate(String $date)
