@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use \Mailjet\Resources;
 use DB;
 
+use App\DestinationDetails;
 
 
 
@@ -105,6 +106,14 @@ class GumTreeRipperController extends Controller
 
     public function getGumtreeData()
     {
+
+        
+
+        // var_dump(DestinationDetails::where('enabled', true)->get());
+        // die();
+
+
+
         $products = ['mattress', 'free'];
         $listItems = [];
         $foundItems = [];

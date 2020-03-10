@@ -18,3 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'GumTreeRipperController@index');
+
+
+
+Route::get('/create_details', 'DestinationDetailsController@create');
