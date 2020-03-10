@@ -203,10 +203,13 @@ class GumTreeRipperController extends Controller
             ]
         ];
 
+        var_dump('blah');
+
         $response = $mj->post(Resources::$Email, ['body' => $body]);
+        var_dump('blah');
+        var_dump($response->getData());
         // Read the response
-        $response->success();
-        // && var_dump($response->getData());
+        $response->success() && var_dump($response->getData());
     }
 
     public function getDate(String $date)
