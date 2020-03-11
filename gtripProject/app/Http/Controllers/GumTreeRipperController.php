@@ -104,23 +104,26 @@ class GumTreeRipperController extends Controller
         //
     }
 
-    public function getGumtreeData()
+    public function capture()
     {
 
-        
+        $itemsToSearch = DestinationDetails::where('enabled', true)->get();
 
-        // var_dump(DestinationDetails::where('enabled', true)->get());
-        // die();
+        foreach ($itemsToSearch as $item) {
+            $this->getGumtreeData($item['url'], json_decode($item['search_keys']));
+        }
 
+    }
 
+    public function getGumtreeData($url, $products)
+    {
 
-        $products = ['mattress', 'free'];
         $listItems = [];
         $foundItems = [];
 
         $client = new Client();
         // Go to the symfony.com website
-        $crawler = $client->request('GET', 'https://www.gumtree.com.au/s-gold-coast/l3006035r50?ad=offering&price-type=free');
+        $crawler = $client->request('GET', $url);
 
         // Creates an array of item titles
         $listItems[] = $crawler->filter('.user-ad-row')->each(function ($node, $i) {

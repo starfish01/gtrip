@@ -31,7 +31,7 @@ class DestinationDetailsController extends Controller
             'search_keys' => json_encode(['mattress', 'free']),
             'enabled' => true
         ]);
-        var_dump('example created');
+
     }
 
     /**

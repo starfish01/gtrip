@@ -22,3 +22,6 @@ Route::get('/home', 'GumTreeRipperController@index');
 
 
 Route::get('/create_details', 'DestinationDetailsController@create');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

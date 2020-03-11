@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('scrapeSearch')->everyMinute();
         // $schedule->call('App\Http\Controllers\testTableController@store')->everyMinute();
-        $schedule->call('App\Http\Controllers\GumTreeRipperController@getGumtreeData')->everyMinute();
+        $schedule->call('App\Http\Controllers\GumTreeRipperController@capture')->everyMinute();
     }
 
     /**
