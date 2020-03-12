@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\scrapeSearch',
+        // 'App\Console\Commands\scrapeSearch',
     ];
 
     /**
@@ -26,8 +26,8 @@ class Kernel extends ConsoleKernel
     {
 
         // $schedule->command('inspire')->everyMinute();
-        $schedule->command('command:scrapeSearch')->everyMinute();
-        $schedule->call('App\Http\Controllers\testTableController@store')->everyMinute();
+        // $schedule->command('command:scrapeSearch')->everyMinute();
+        // $schedule->call('App\Http\Controllers\testTableController@store')->everyMinute();
         $schedule->call('App\Http\Controllers\GumTreeRipperController@capture')->everyMinute();
     }
 
