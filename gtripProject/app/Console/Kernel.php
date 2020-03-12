@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        // $schedule->command('scrapeSearch')->everyMinute();
+        $schedule->command('scrapeSearch')->everyMinute();
         // $schedule->call('App\Http\Controllers\testTableController@store')->everyMinute();
         $schedule->call('App\Http\Controllers\GumTreeRipperController@capture')->everyMinute();
     }

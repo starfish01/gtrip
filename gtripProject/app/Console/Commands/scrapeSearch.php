@@ -42,7 +42,7 @@ class scrapeSearch extends Command
     {
         //
         testTableController::store();
-        // GumTreeRipperController::store();
+        GumTreeRipperController::capture();
 
         echo 'hi';
     }

@@ -20,8 +20,11 @@ Route::get('/', function () {
 Route::get('/home', 'GumTreeRipperController@index');
 
 
-
-Route::get('/create_details', 'DestinationDetailsController@create');
+Route::group(['middleware' => 'auth'], function () {
+    // This is a temp solution
+    Route::get('/create_details', 'DestinationDetailsController@create');
+    
+    Route::get('/home', 'HomeController@index')->name('home');
+});
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');

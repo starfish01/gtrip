@@ -20,6 +20,12 @@ class CreateDestinationDetailsTable extends Migration
             $table->String('url');
             $table->String('search_keys');
             $table->boolean('enabled')->default(1);
+            $table->unsignedBigInteger('user_id');
+            
+            $table->foreign('user_id')->references('id')->on('users');
+
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

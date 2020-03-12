@@ -14,7 +14,9 @@
                         </div>
                     @endif
 
-                    {{ $urls }}
+                    {{ $user }}
+                    <hr>
+                    {{$urls}}
 
                     You are logged in!
                 </div>
