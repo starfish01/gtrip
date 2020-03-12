@@ -112,7 +112,6 @@ class GumTreeRipperController extends Controller
         foreach ($itemsToSearch as $item) {
             $this->getGumtreeData($item['url'], json_decode($item['search_keys']));
         }
-
     }
 
     public function getGumtreeData($url, $products)

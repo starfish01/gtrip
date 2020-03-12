@@ -40,10 +40,10 @@ class scrapeSearch extends Command
      */
     public function handle()
     {
-        //
-        testTableController::store();
-        GumTreeRipperController::capture();
-
         echo 'hi';
+        // //
+        // testTableController::store();
+        // GumTreeRipperController::capture();
+        // $schedule->call('App\Http\Controllers\GumTreeRipperController@capture')->everyMinute();
     }
 }
