@@ -30,6 +30,6 @@ class HomeController extends Controller
 
         $data = DestinationDetails::where('enabled', true)->get();
 
-        return view('home', ['urls' => $data, 'user' => $user]);
+        return view('home', ['data' => $data, 'user' => $user]);
     }
 }

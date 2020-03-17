@@ -5,18 +5,37 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-            <div class="card-header">Dashboard </div>
+                <div class="card-header">Dashboard </div>
 
                 <div class="card-body">
                     @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
+                    <div class="alert alert-success" role="alert">
+                        {{ session('status') }}
+                    </div>
                     @endif
 
-                    {{ $user }}
+                    User ID: {{ $user }}
                     <hr>
-                    {{$urls}}
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>URL</th>
+                            <th>search_keys</th>
+                            <th>enabled</th>
+                        </tr>
+                        @foreach($data as $item)
+                        <tr>
+                            <th>{{ $item['id'] }}</th>
+                            <th>{{ $item['title'] }}</th>
+                            <th><a href="{{ $item['url'] }}" target="_blank">Open</a></th>
+                            <th>{{ $item['search_keys'] }}</th>
+                            <th>{{ $item['enabled'] ? 'enabled' : 'off' }}</th>
+                        </tr>
+                        @endforeach
+                    </table>
+
+
 
                     You are logged in!
                 </div>
