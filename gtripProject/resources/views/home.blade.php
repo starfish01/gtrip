@@ -16,12 +16,13 @@
 
                     User ID: {{ $user }}
                     <hr>
-                    <table>
+                    <table class="table">
                         <tr>
                             <th>ID</th>
                             <th>Title</th>
                             <th>URL</th>
                             <th>search_keys</th>
+                            <th>skip keys</th>
                             <th>enabled</th>
                         </tr>
                         @foreach($data as $item)
@@ -29,15 +30,12 @@
                             <th>{{ $item['id'] }}</th>
                             <th>{{ $item['title'] }}</th>
                             <th><a href="{{ $item['url'] }}" target="_blank">Open</a></th>
-                            <th>{{ $item['search_keys'] }}</th>
+                            <th>{{ $item['keys']['keys'] }}</th>
+                            <th>{{ $item['keys']['skip_keys'] }}</th>
                             <th>{{ $item['enabled'] ? 'enabled' : 'off' }}</th>
                         </tr>
                         @endforeach
                     </table>
-
-
-
-                    You are logged in!
                 </div>
             </div>
         </div>

@@ -18,13 +18,13 @@ class SearchKeysTable extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('destination_id');
+            $table->unsignedBigInteger('destination_details_id');
 
             $table->String('keys');
             $table->String('skip_keys');
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('destination_id')->references('id')->on('destination_details');
+            $table->foreign('destination_details_id')->references('id')->on('destination_details');
         });
     }
 

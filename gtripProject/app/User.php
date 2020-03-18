@@ -36,4 +36,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function destinations()
+    {
+        return $this->hasMany(DestinationDetails::class, 'user_id')->latest('updated_at');
+    }
+
+    public function accessibleDestinations()
+    {
+        return DestinationDetails::where('user_id', $this->id)->get();
+    }
 }

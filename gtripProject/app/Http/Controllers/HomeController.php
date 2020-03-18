@@ -26,9 +26,17 @@ class HomeController extends Controller
     {
         // I want to grab Destination details here and pass it to the view
 
+
+        // $projects = auth()->user()->accessibleDestinations()::with('keys')->get();
+
+        // $data = DestinationDetails::with('keys')->get();
+
+        // return view('home', ['data' => $data, 'user' => $user]);
+
+
         $user = auth()->user()->id;
 
-        $data = DestinationDetails::where('enabled', true)->get();
+        $data = DestinationDetails::with('keys')->get();
 
         return view('home', ['data' => $data, 'user' => $user]);
     }
