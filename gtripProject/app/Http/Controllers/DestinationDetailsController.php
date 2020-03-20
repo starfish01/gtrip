@@ -24,17 +24,15 @@ class DestinationDetailsController extends Controller
      */
     public function create()
     {
-        
+
         $userId = auth()->user()->id;
 
         DestinationDetails::create([
             'user_id' => $userId,
             'title' => 'GC - Freebie Page',
             'url' => 'https://www.gumtree.com.au/s-gold-coast/l3006035r50?ad=offering&price-type=free',
-            'search_keys' => json_encode(['mattress', 'free']),
             'enabled' => true
         ]);
-
     }
 
     /**

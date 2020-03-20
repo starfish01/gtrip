@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\GumTreeRipperController;
-use App\Http\Controllers\testTableController;
 use Illuminate\Console\Command;
-use App\testtable;
 
 class scrapeSearch extends Command
 {
@@ -42,7 +40,6 @@ class scrapeSearch extends Command
     {
         echo 'hi';
         // //
-        // testTableController::store();
         // GumTreeRipperController::capture();
         // $schedule->call('App\Http\Controllers\GumTreeRipperController@capture')->everyMinute();
     }
