@@ -200,7 +200,6 @@ class GumTreeRipperController extends Controller
     public function sendEmails()
     {
         // get items from db marked not sent
-        // might be this DB::table('gumtree_item')->('email_sent', false)->get();
         $itemsToEmail = GumTreeRipper::where([['email_sent', false], ['filtered_out', false]])->get();
 
         if (count($itemsToEmail) === 0) {
