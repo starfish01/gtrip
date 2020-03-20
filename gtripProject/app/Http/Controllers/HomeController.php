@@ -24,20 +24,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // I want to grab Destination details here and pass it to the view
-
-
-        // $projects = auth()->user()->accessibleDestinations()::with('keys')->get();
-
-        // $data = DestinationDetails::with('keys')->get();
-
-        // return view('home', ['data' => $data, 'user' => $user]);
-
 
         $user = auth()->user()->id;
 
-        $data = DestinationDetails::with('keys')->get();
+        $newData = auth()->user()->accessibleDestinations();
 
-        return view('home', ['data' => $data, 'user' => $user]);
+        $foundItems = auth()->user()->accessibleFoundItems();
+
+        // $data = DestinationDetails::where([
+        //     ['enabled', true],
+        //     ['user_id', '=', $user]
+        // ])->with('keys')->get();
+
+        return view('home', ['data' => $newData, 'user' => $user, 'foundItems' => $foundItems]);
     }
 }

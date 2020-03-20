@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return DestinationDetails::where('user_id', $this->id)->get();
     }
+
+    public function accessibleFoundItems()
+    {
+        return GumTreeRipper::where('user_id', $this->id)->latest('updated_at')->get();
+    }
 }

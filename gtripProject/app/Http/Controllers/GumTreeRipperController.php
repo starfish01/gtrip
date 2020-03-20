@@ -54,7 +54,9 @@ class GumTreeRipperController extends Controller
                 'createdAt' => $item['createdAt'],
                 'location' => $item['location'],
                 'distance' => $item['distance'],
-                'suburb' => $item['suburb']
+                'suburb' => $item['suburb'],
+                'filtered_out' =>  $item['filtered_out'],
+                'user_id' =>  $item['user_id']
             ]);
         }
     }
@@ -110,11 +112,11 @@ class GumTreeRipperController extends Controller
         $itemsToSearch = DestinationDetails::where('enabled', true)->get();
 
         foreach ($itemsToSearch as $item) {
-            $this->getGumtreeData($item['url'], json_decode($item['search_keys']));
+            $this->getGumtreeData($item['url'], json_decode($item['keys']['keys']),  json_decode($item['keys']['skip_keys']), $item['user_id']);
         }
     }
 
-    public function getGumtreeData($url, $products)
+    public function getGumtreeData($url, $products, $filterOut, $userId)
     {
 
         $listItems = [];
@@ -125,14 +127,12 @@ class GumTreeRipperController extends Controller
         $crawler = $client->request('GET', $url);
 
         // Creates an array of item titles
-        $listItems[] = $crawler->filter('.user-ad-row')->each(function ($node, $i) {
+        $listItems[] = $crawler->filter('.user-ad-row')->each(function ($node, $i) use (&$userId) {
 
             // convert time possible results = yesterday hours minutes an actual date
-
             $dateOfCreation = $this->getDate($node->filter('.user-ad-row__age')->text());
 
             // TODO remove item earlier rather then in the next loop
-
             $item = [];
             $item['title'] = $node->filter('.user-ad-row__title')->text();
             $item['url'] = $node->attr('href');
@@ -141,43 +141,72 @@ class GumTreeRipperController extends Controller
             $item['location'] = $node->filter('.user-ad-row__location .user-ad-row__location-area')->text();
             $item['distance'] = $node->filter('.user-ad-row__location .user-ad-row__distance')->text();
             $item['suburb'] = str_replace($item['distance'], '', str_replace($item['location'], '', $node->filter('.user-ad-row__location')->text()));
-
+            $item['filtered_out'] = false;
+            $item['user_id'] = $userId;
             return $item;
         });
 
         $listItems = $listItems[0];
+
+        $foundItems = $this->findItemsMatchingKeys($listItems, $products);
+
+        if (count($foundItems) === 0) {
+            return;
+        }
+
+        // Mark found items that need to be filtered out 
+        $filterApplied = $this->filterOutItems($foundItems, $filterOut);
+
+        $this->store($filterApplied);
+
+        $this->sendEmails();
+    }
+
+    public function filterOutItems($foundItems, $filterOut)
+    {
+        $returnItems = [];
+
+        // Loop though items and search for key items
+        foreach ($foundItems as $item) {
+            foreach ($filterOut as $searchingFor) {
+                if (strpos(strtolower($item['title']), $searchingFor) !== false) {
+                    $item['filtered_out'] = true;
+                }
+                $returnItems[] = $item;
+            }
+        }
+        return $returnItems;
+    }
+
+
+    public function findItemsMatchingKeys($listItems, $products)
+    {
+        $returnFound = [];
 
         // Loop though items and search for key items
         foreach ($listItems as $item) {
             foreach ($products as $searchingFor) {
                 if (strpos(strtolower($item['title']), $searchingFor) !== false) {
                     if (!GumTreeRipper::where('item_id', '=', $item['id'])->exists()) {
-                        $foundItems[] = $item;
+                        $returnFound[] = $item;
                     }
                 }
             }
         }
 
-        if (count($foundItems) === 0) {
-            return;
-        }
-
-        $this->store($foundItems);
-
-        $this->sendEmails();
+        return $returnFound;
     }
 
     public function sendEmails()
     {
         // get items from db marked not sent
         // might be this DB::table('gumtree_item')->('email_sent', false)->get();
-        $itemsToEmail = GumTreeRipper::where('email_sent', false)->get();
+        $itemsToEmail = GumTreeRipper::where([['email_sent', false], ['filtered_out', false]])->get();
 
         if (count($itemsToEmail) === 0) {
             return;
         }
 
-        GumTreeRipper::where('email_sent', false)->update(['email_sent' => true]);
 
         $message = '';
 
@@ -217,10 +246,10 @@ class GumTreeRipperController extends Controller
         var_dump('blah');
 
         $response = $mj->post(Resources::$Email, ['body' => $body]);
-        var_dump('blah');
-        var_dump($response->getData());
         // Read the response
         $response->success() && var_dump($response->getData());
+
+        GumTreeRipper::where([['email_sent', false], ['filtered_out', false]])->update(['email_sent' => true]);
     }
 
     public function getDate(String $date)
