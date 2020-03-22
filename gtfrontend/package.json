@@ -1,0 +1,24 @@
+{
+  "name": "gtfrontend",
+  "version": "1.0.0",
+  "description": "My scrumtrulescent Nuxt.js project",
+  "author": "Patrick Labes",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/auth": "^4.9.0",
+    "@nuxtjs/axios": "^5.9.5",
+    "nuxt-buefy": "^0.3.2",
+    "buefy": "^0.8.13",
+    "bulma": "^0.8.0",
+    "node-sass": "^4.13.1",
+    "nuxt": "^2.0.0",
+    "sass-loader": "^8.0.2"
+  },
+  "devDependencies": {}
+}
