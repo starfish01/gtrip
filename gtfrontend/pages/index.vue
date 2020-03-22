@@ -2,8 +2,12 @@
   <div class="container">
     <p v-if="loggedIn">
       Hello {{ user.name }}
-      <hr>
+      
       {{user}}
+
+      <button @click="getData()">click</button>
+      {{destinationData}}
+
     </p>
     <p v-if="!loggedIn">
       Please sign in
@@ -22,7 +26,20 @@ export default {
 <script>
 
 export default {
+    data() {
+    return {
+      destinationData: [],
+    };
+  },
   components: {
+  },
+  methods: {
+    getData() {
+      this.$axios.get('/user/destinationdata').then((data)=>{
+        // console.log(data.data);
+        this.destinationData = data.data;
+      })
+    }
   }
 }
 </script>

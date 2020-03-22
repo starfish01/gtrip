@@ -54,7 +54,12 @@ class DestinationDetailsController extends Controller
      */
     public function show(DestinationDetails $destinationDetails)
     {
-        //
+
+        $destinations = auth()->user()->accessibleDestinations();
+
+        $foundItems = auth()->user()->accessibleFoundItems();
+
+        return ['destinations' => $destinations, 'found_items' => $foundItems];
     }
 
     /**

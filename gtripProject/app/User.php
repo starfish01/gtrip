@@ -62,6 +62,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function accessibleFoundItems()
     {
+        // return GumTreeRipper::latest('updated_at')->get();
         return GumTreeRipper::where('user_id', $this->id)->latest('updated_at')->get();
     }
 }
