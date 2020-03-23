@@ -15,6 +15,7 @@ class searchKeysController extends Controller
     public function index()
     {
         //
+
     }
 
     /**

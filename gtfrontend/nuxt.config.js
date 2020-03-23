@@ -23,17 +23,17 @@ export default {
   /*
   ** Global CSS
   */
- css: [
-   '@assets/styles/main.scss'
- ],
+  css: [
+    '@assets/styles/main.scss'
+  ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~plugins/mixins/user.js',
-    '~plugins/buefy.js'
-
+    { src: '~plugins/mixins/user.js' },
+    { src: '~plugins/buefy.js' },
+    { src: '~/plugins/localStorage.js', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -74,13 +74,13 @@ export default {
     /*
     ** You can extend webpack config here
     */
-   plugins: [
-    new webpack.ProvidePlugin({
-      // global modules
+    plugins: [
+      new webpack.ProvidePlugin({
+        // global modules
         '_': 'lodash'
       })
     ],
-    extend (config, ctx) {
+    extend(config, ctx) {
     }
   }
 }

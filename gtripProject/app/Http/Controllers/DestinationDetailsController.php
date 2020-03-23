@@ -57,9 +57,16 @@ class DestinationDetailsController extends Controller
 
         $destinations = auth()->user()->accessibleDestinations();
 
-        $foundItems = auth()->user()->accessibleFoundItems();
+        // $foundItems = auth()->user()->accessibleFoundItems();
 
-        return ['destinations' => $destinations, 'found_items' => $foundItems];
+        return ['destinations' => $destinations];
+    }
+
+    public function singleItem($id)
+    {
+        return $id;
+
+        $destinations = auth()->user()->singleAccessibleDestinations($id);
     }
 
     /**

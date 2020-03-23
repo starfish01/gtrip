@@ -1,8 +1,8 @@
 export const getters = {
-    loggedIn (state) {
+    loggedIn(state) {
         return state.auth.loggedIn
     },
-    user (state) {
+    user(state) {
         return state.auth.user
     }
 }

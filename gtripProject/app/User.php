@@ -38,7 +38,7 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -57,7 +57,18 @@ class User extends Authenticatable implements JWTSubject
 
     public function accessibleDestinations()
     {
-        return DestinationDetails::where('user_id', $this->id)->get();
+        return DestinationDetails::where('user_id', $this->id)->with('foundItems', 'keys')->get();
+
+        ///->with('keys')
+    }
+
+    public function singleAccessibleDestinations($id)
+    {
+        // return DestinationDetails::where([
+        //     ['user_id', $this->id],
+        //     []
+        // ])->get();
+        return [];
     }
 
     public function accessibleFoundItems()

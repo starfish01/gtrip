@@ -18,4 +18,9 @@ class DestinationDetails extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function foundItems()
+    {
+        return $this->hasMany(GumTreeRipper::class);
+    }
 }

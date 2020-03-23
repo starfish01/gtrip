@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Navbar from "./partials/Navbar";
+import Navbar from "./partials/navbar";
 export default {
   components: {
     Navbar
@@ -23,5 +23,4 @@ export default {
 </script>
 
 <style lang="scss">
-
 </style>
