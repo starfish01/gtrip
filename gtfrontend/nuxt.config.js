@@ -1,3 +1,4 @@
+import webpack from 'webpack';
 
 export default {
   mode: 'spa',
@@ -22,7 +23,9 @@ export default {
   /*
   ** Global CSS
   */
- css: [],
+ css: [
+   '@assets/styles/main.scss'
+ ],
 
   /*
   ** Plugins to load before mounting the App
@@ -71,6 +74,12 @@ export default {
     /*
     ** You can extend webpack config here
     */
+   plugins: [
+    new webpack.ProvidePlugin({
+      // global modules
+        '_': 'lodash'
+      })
+    ],
     extend (config, ctx) {
     }
   }

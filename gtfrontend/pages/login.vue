@@ -1,11 +1,11 @@
 <template>
   <section class="section">
-        <h2 class="title is-3 has-text-grey">Login</h2>
+    <h2 class="title is-3 has-text-grey">Login</h2>
 
     <div class="columns is-touch">
       <div class="column">
         <b-field label="Email">
-          <b-input type="email" v-model="userForm.email" maxlength="30">
+          <b-input type="email" v-model="userForm.email" >
           </b-input>
         </b-field>
 
@@ -22,6 +22,7 @@
 
 <script>
 export default {
+  middleware: "auth",
   data() {
     return {
       userForm: {

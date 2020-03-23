@@ -34,9 +34,15 @@
             </nuxt-link>
           </template>
           <template v-else>
-            <b-button @click.prevent="logout" class="button is-light">
-              Logout
-            </b-button>
+            <b-navbar-dropdown :label="user.name">
+              <b-navbar-item @click.prevent="logout">
+                Logout
+              </b-navbar-item>
+
+              <b-navbar-item href='/dashboard/user/'>
+                Update Details
+              </b-navbar-item>
+            </b-navbar-dropdown>
           </template>
         </div>
       </b-navbar-item>
@@ -56,6 +62,7 @@ export default {
 
 <style scoped>
 .navbar {
-  max-height: 50px;
+  /* max-height: 50px; */
+  padding: 0 69px;
 }
 </style>

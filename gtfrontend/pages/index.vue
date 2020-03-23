@@ -1,49 +1,37 @@
 <template>
-  <div class="container">
-    <p v-if="loggedIn">
-      Hello {{ user.name }}
-      
-      {{user}}
+  <section class="section">
+    <h2 class="title is-3 has-text-grey">Home</h2>
 
-      <button @click="getData()">click</button>
-      {{destinationData}}
-
-    </p>
-    <p v-if="!loggedIn">
-      Please sign in
-    </p>
-  </div>
+    <div class="columns is-touch">
+      <div class="column">
+        Homepage
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-
-export default {
-  
-}
+export default {};
 </script>
-
 
 <script>
-
 export default {
-    data() {
+  middleware: "guest",
+  data() {
     return {
-      destinationData: [],
+      destinationData: []
     };
   },
-  components: {
-  },
+  components: {},
   methods: {
     getData() {
-      this.$axios.get('/user/destinationdata').then((data)=>{
+      this.$axios.get("/user/destinationdata").then(data => {
         // console.log(data.data);
         this.destinationData = data.data;
-      })
+      });
     }
   }
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
