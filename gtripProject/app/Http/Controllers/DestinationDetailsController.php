@@ -57,8 +57,6 @@ class DestinationDetailsController extends Controller
 
         $destinations = auth()->user()->accessibleDestinations();
 
-        // $foundItems = auth()->user()->accessibleFoundItems();
-
         return ['destinations' => $destinations];
     }
 
@@ -101,5 +99,22 @@ class DestinationDetailsController extends Controller
     public function destroy(DestinationDetails $destinationDetails)
     {
         //
+    }
+
+    public function enableDisableDestination(Request $request, $id)
+    {
+        $enabledPosition = $request['enabledPosition'];
+
+        if ($enabledPosition !== 0 && $enabledPosition !== 1) {
+            return 'error';
+        }
+
+        DestinationDetails::where([
+            ['user_id', auth()->user()->id],
+            ['id', $id]
+        ])->update(['enabled' => $enabledPosition]);
+
+
+        return $enabledPosition;
     }
 }

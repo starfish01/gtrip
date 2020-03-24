@@ -26,8 +26,14 @@
                   </div>
                 </div>
                 <div class="content">
-                  <span class="db">Enabled: {{ destinationData.enabled ? 'Yes' : 'No'}}</span>
-                  <b-switch @input="enableDestination()"></b-switch>
+                  <span
+                    class="db"
+                  >Destination is Enabled: {{ destinationData.enabled ? 'Yes' : 'No'}}</span>
+                  <b-button
+                    @click="destinationSwitch"
+                    :type="destinationData.enabled ? 'is-warning' : 'is-success' "
+                  >{{destinationData.enabled ? 'Disable' : 'Enabled'}} Destination</b-button>
+
                   <span class="db">Found Items: {{destinationData.found_items.length}}</span>
                   <span class="db">
                     URL:
@@ -119,9 +125,12 @@ import { mapGetters, mapMutations } from "vuex";
 
 export default {
   middleware: "auth",
+  data() {
+    return {};
+  },
   methods: {
-    enableDestination() {
-      alert("dd");
+    destinationSwitch() {
+      this.$store.dispatch("userData/enabledDisableDestination");
     },
     ...mapMutations({ setSingleDestination: "userData/setSingleDestination" })
   },
