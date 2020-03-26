@@ -55,7 +55,21 @@
                 </div>
 
                 <div class="content">
-                  <b-button class="mb-5">Add Destination +</b-button>
+                  <template v-if="addDestination">
+                    <b-field label="Name">
+                      <b-input v-model="newdestination.name"></b-input>
+                    </b-field>
+                    <b-field label="URL">
+                      <b-input v-model="newdestination.url"></b-input>
+                    </b-field>
+                    <b-button class="mb-5" @click="addDestinationBtn()">Save</b-button>
+                  </template>
+
+                  <b-button class="mb-5" @click="addDestinationBtn()">
+                    <span v-if="addDestination">Cancel</span>
+                    <span v-else>Add Destination +</span>
+                  </b-button>
+
                   <div class="list is-hoverable">
                     <a
                       class="list-item"
@@ -83,7 +97,24 @@ import { mapGetters } from "vuex";
 
 export default {
   middleware: "auth",
-  methods: {},
+  data() {
+    return {
+      addDestination: false,
+      newdestination: {
+        name: "",
+        url: ""
+      }
+    };
+  },
+  methods: {
+    addDestinationBtn() {
+      this.addDestination = !this.addDestination;
+      if (!this.addDestination) {
+        this.newdestination.name = "";
+        this.newdestination.url = '';
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       destinationData: "userData/getDestinationData",
