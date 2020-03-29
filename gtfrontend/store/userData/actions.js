@@ -14,6 +14,15 @@ export default {
       });
   },
 
+  deleteDestination(context, payload) {
+    return this.$axios.delete("/user/destinationdata/" + payload, ).then(data => {
+      return true;
+    }).catch(error => {
+      return Promise.reject(error);
+    });
+
+  },
+
   enabledDisableDestination(context) {
     const destinationId = context.state.selectedDestination.id;
     const destinationState = context.state.selectedDestination.enabled === 1 ? 0 : 1;
@@ -33,7 +42,7 @@ export default {
       context.commit('addNewDestinationToState', data.data);
       return data.data[0].id;
     }).catch(error => {
-        return Promise.reject(error);
+      return Promise.reject(error);
     });
   }
 }

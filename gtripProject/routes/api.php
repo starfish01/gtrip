@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/user', 'Auth\AuthController@user');
     Route::get('/user/destinationdata', 'DestinationDetailsController@show');
     Route::post('/user/destinationdata', 'DestinationDetailsController@store');
+    Route::delete('/user/destinationdata/{id}', 'DestinationDetailsController@destroy');
 
     Route::get('/user/destinationdata/{id}', 'DestinationDetailsController@singleItem');
 

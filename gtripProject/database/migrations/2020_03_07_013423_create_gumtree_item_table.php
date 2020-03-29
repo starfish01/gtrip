@@ -26,7 +26,7 @@ class CreateGumtreeItemTable extends Migration
             $table->boolean('email_sent')->default(0);
             $table->boolean('filtered_out')->default(0);
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

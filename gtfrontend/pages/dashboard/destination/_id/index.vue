@@ -50,6 +50,31 @@
                     URL:
                     <a :href="destinationData.url" target="_blank">{{ destinationData.url }}</a>
                   </span>
+                  <span class="db">
+                    <b-button @click="isComponentModalActive = true" :type="'is-danger'">Delete</b-button>
+
+                    <b-modal
+                      :active.sync="isComponentModalActive"
+                      has-modal-card
+                      trap-focus
+                      aria-role="dialog"
+                      aria-modal
+                    >
+                      <div class="modal-card" style="width: auto">
+                        <header class="modal-card-head">
+                          <p class="modal-card-title">Do you wish to delete this destination?</p>
+                        </header>
+                        <section class="modal-card-body">
+                          <button
+                            class="button"
+                            type="button"
+                            @click="isComponentModalActive = false"
+                          >Cancel</button>
+                          <button class="button is-danger" @click="deleteDestination()">Yes</button>
+                        </section>
+                      </div>
+                    </b-modal>
+                  </span>
                 </div>
               </div>
             </div>
@@ -140,12 +165,24 @@ export default {
     return {
       destinationData: null,
       isLoading: true,
-      error: null
+      error: null,
+      isComponentModalActive: false
     };
   },
   methods: {
     destinationSwitch() {
       this.$store.dispatch("userData/enabledDisableDestination");
+    },
+    deleteDestination() {
+      this.$store
+        .dispatch("userData/deleteDestination", this.destinationData.id)
+        .then(data => {
+          this.$router.push("/dashboard");
+        })
+        .catch(error => {
+          console.log(error);
+          // do something
+        });
     },
     ...mapMutations({})
   },
@@ -154,7 +191,7 @@ export default {
   },
   created() {
     if (!this.$route.params.id) {
-      this.$router.push('/dashboard');
+      this.$router.push("/dashboard");
     }
     this.$store
       .dispatch("userData/getSingleDestination", this.$route.params.id)

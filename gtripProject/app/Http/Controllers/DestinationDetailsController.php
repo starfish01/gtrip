@@ -47,7 +47,7 @@ class DestinationDetailsController extends Controller
     {
 
         $userId = auth()->user()->id;
-        
+
         request()->validate([
             'title' => 'required',
             'url' => 'required'
@@ -59,7 +59,7 @@ class DestinationDetailsController extends Controller
             'url' => request()->url,
             'enabled' => false
         ]);
-        
+
         searchKeys::create([
             'user_id' => $userId,
             'destination_details_id' => $newDestination->id,
@@ -68,7 +68,6 @@ class DestinationDetailsController extends Controller
         ]);
 
         return auth()->user()->singleAccessibleDestinations($newDestination->id);
-        
     }
 
     /**
@@ -119,9 +118,18 @@ class DestinationDetailsController extends Controller
      * @param  \App\DestinationDetails  $destinationDetails
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestinationDetails $destinationDetails)
+    public function destroy(DestinationDetails $destinationDetails, $id)
     {
-        //
+
+        $deleted = DestinationDetails::where([
+            ['user_id', auth()->user()->id],
+            ['id', $id]
+        ])->delete();
+
+        if ($deleted) {
+            return true;
+        } 
+        abort(404, 'Page not found');
     }
 
     public function enableDisableDestination(Request $request, $id)

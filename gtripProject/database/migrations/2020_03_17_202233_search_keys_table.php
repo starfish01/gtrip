@@ -24,7 +24,7 @@ class SearchKeysTable extends Migration
             $table->String('skip_keys');
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('destination_details_id')->references('id')->on('destination_details');
+            $table->foreign('destination_details_id')->references('id')->on('destination_details')->onDelete('cascade');
         });
     }
 
