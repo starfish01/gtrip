@@ -26,7 +26,6 @@ export default {
   methods: {
     getData() {
       this.$axios.get("/user/destinationdata").then(data => {
-        // console.log(data.data);
         this.destinationData = data.data;
       });
     }

@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class searchKeys extends Model
 {
     //
+    protected $guarded = [];
 }

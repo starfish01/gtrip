@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\DestinationDetails;
 use Illuminate\Http\Request;
 
+use App\searchKeys;
+
 class DestinationDetailsController extends Controller
 {
     /**
@@ -43,7 +45,30 @@ class DestinationDetailsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $userId = auth()->user()->id;
+        
+        request()->validate([
+            'title' => 'required',
+            'url' => 'required'
+        ]);
+
+        $newDestination = DestinationDetails::create([
+            'user_id' => $userId,
+            'title' => request()->title,
+            'url' => request()->url,
+            'enabled' => false
+        ]);
+        
+        searchKeys::create([
+            'user_id' => $userId,
+            'destination_details_id' => $newDestination->id,
+            'keys' => '[]',
+            'skip_keys' => '[]'
+        ]);
+
+        return auth()->user()->singleAccessibleDestinations($newDestination->id);
+        
     }
 
     /**
@@ -62,9 +87,7 @@ class DestinationDetailsController extends Controller
 
     public function singleItem($id)
     {
-        return $id;
-
-        $destinations = auth()->user()->singleAccessibleDestinations($id);
+        return auth()->user()->singleAccessibleDestinations($id);
     }
 
     /**

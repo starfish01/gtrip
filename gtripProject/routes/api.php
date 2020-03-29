@@ -27,6 +27,8 @@ Route::prefix('auth')->group(function () {
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/user', 'Auth\AuthController@user');
     Route::get('/user/destinationdata', 'DestinationDetailsController@show');
+    Route::post('/user/destinationdata', 'DestinationDetailsController@store');
+
     Route::get('/user/destinationdata/{id}', 'DestinationDetailsController@singleItem');
 
     Route::post('/user/destinationdata/{id}/enableddisable',  'DestinationDetailsController@enableDisableDestination');

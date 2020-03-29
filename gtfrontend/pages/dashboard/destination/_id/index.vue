@@ -7,15 +7,26 @@
           <li>
             <a href="/dashboard">Dashboard</a>
           </li>
-          <li class="is-active">
-            <a href="#" aria-current="page">Title</a>
+
+          <li class="is-active" v-if="!isLoading && destinationData">
+            <a href="#" aria-current="page">{{destinationData.title}}</a>
           </li>
         </ul>
       </nav>
-      <template v-if="!destinationData">
+
+      <template v-if="isLoading">
         <progress class="progress is-small is-primary" max="100">15%</progress>
       </template>
-      <template v-else>
+
+      <template v-if="!isLoading && !destinationData">
+        <p>Something went wrong :(</p>
+        <p>{{error}}</p>
+        <p>
+          <a href="/dashboard">Click here to return to the dashboard</a>
+        </p>
+      </template>
+
+      <template v-if="!isLoading && destinationData">
         <div class="columns is-touch">
           <div class="column">
             <div class="card">
@@ -126,21 +137,36 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   middleware: "auth",
   data() {
-    return {};
+    return {
+      destinationData: null,
+      isLoading: true,
+      error: null
+    };
   },
   methods: {
     destinationSwitch() {
       this.$store.dispatch("userData/enabledDisableDestination");
     },
-    ...mapMutations({ setSingleDestination: "userData/setSingleDestination" })
+    ...mapMutations({})
   },
   computed: {
-    ...mapGetters({
-      destinationData: "userData/getSingleDestinationData"
-    })
+    ...mapGetters({})
   },
   created() {
-    this.setSingleDestination(this.$route.params.id);
+    if (!this.$route.params.id) {
+      this.$router.push('/dashboard');
+    }
+    this.$store
+      .dispatch("userData/getSingleDestination", this.$route.params.id)
+      .then(data => {
+        this.isLoading = false;
+        this.destinationData = data[0];
+      })
+      .catch(error => {
+        this.isLoading = false;
+        this.error = error;
+        // console.log(error);
+      });
   }
 };
 </script>

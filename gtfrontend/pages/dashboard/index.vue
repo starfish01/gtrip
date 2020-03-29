@@ -56,13 +56,14 @@
 
                 <div class="content">
                   <template v-if="addDestination">
-                    <b-field label="Name">
-                      <b-input v-model="newdestination.name"></b-input>
+                    <b-field label="title">
+                      <b-input v-model="newdestination.title"></b-input>
                     </b-field>
                     <b-field label="URL">
                       <b-input v-model="newdestination.url"></b-input>
                     </b-field>
-                    <b-button class="mb-5" @click="addDestinationBtn()">Save</b-button>
+                    <b-button :disabled="!newdestination.title.length || !newdestination.url.length" class="mb-5" @click="addDestinationSaveBtn()">Save</b-button>
+                    <b-loading :is-full-page="false" :active.sync="isLoadingNewDestination"></b-loading>
                   </template>
 
                   <b-button class="mb-5" @click="addDestinationBtn()">
@@ -101,18 +102,37 @@ export default {
     return {
       addDestination: false,
       newdestination: {
-        name: "",
+        title: "",
         url: ""
-      }
+      },
+      isLoadingNewDestination: false
     };
   },
   methods: {
     addDestinationBtn() {
       this.addDestination = !this.addDestination;
       if (!this.addDestination) {
-        this.newdestination.name = "";
-        this.newdestination.url = '';
+        this.newdestination.title = "";
+        this.newdestination.url = "";
       }
+    },
+    addDestinationSaveBtn() {
+      this.isLoadingNewDestination = true;
+      this.$store
+        .dispatch("userData/addNewDestination", this.newdestination)
+        .then(data => {
+          this.addDestinationBtn();
+          this.isLoadingNewDestination = false;
+          this.$router.push("/dashboard/destination/" + data);
+        })
+        .catch(error => {
+          this.addDestinationBtn();
+          this.isLoadingNewDestination = false;
+          this.$buefy.toast.open({
+            message: 'An Error Occured unable to save new destination',
+            type: "is-danger"
+          });
+        });
     }
   },
   computed: {
