@@ -88,7 +88,9 @@
                 <div class="media">
                   <div class="media-content">
                     <p class="title is-4">Key Words</p>
-                    {{destinationData.keys.keys}}
+                    <div class="list is-hoverable">
+                      <a class="list-item" v-for="(item,index) in keyWords" :key="index">{{ item }}</a>
+                    </div>
                   </div>
                 </div>
 
@@ -102,7 +104,10 @@
                 <div class="media">
                   <div class="media-content">
                     <p class="title is-4">Fliter Out</p>
-                    {{destinationData.keys.skip_keys}}
+
+                    <div class="list is-hoverable">
+                      <a class="list-item" v-for="(item,index) in skipKeys" :key="index">{{ item }}</a>
+                    </div>
                   </div>
                 </div>
 
@@ -166,7 +171,9 @@ export default {
       destinationData: null,
       isLoading: true,
       error: null,
-      isComponentModalActive: false
+      isComponentModalActive: false,
+      keyWords: null,
+      skipKeys: null
     };
   },
   methods: {
@@ -184,6 +191,7 @@ export default {
           // do something
         });
     },
+
     ...mapMutations({})
   },
   computed: {
@@ -198,6 +206,11 @@ export default {
       .then(data => {
         this.isLoading = false;
         this.destinationData = data[0];
+
+        this.keyWords = data[0].keys.keys.replace(/[\[\]']+/g, "").split(",");
+        this.skipKeys = data[0].keys.skip_keys
+          .replace(/[\[\]']+/g, "")
+          .split(",");
       })
       .catch(error => {
         this.isLoading = false;

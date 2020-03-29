@@ -65,7 +65,8 @@ class User extends Authenticatable implements JWTSubject
     public function singleAccessibleDestinations($id)
     {
         $destination = DestinationDetails::where([
-            ['id', $id]
+            ['id', $id],
+            ['user_id', $this->id]
         ])->with('foundItems', 'keys')->get();
 
         if (count($destination)) {
