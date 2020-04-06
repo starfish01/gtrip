@@ -89,7 +89,19 @@
                   <div class="media-content">
                     <p class="title is-4">Key Words</p>
                     <div class="list is-hoverable">
-                      <a class="list-item" v-for="(item,index) in keyWords" :key="index">{{ item }}</a>
+                      <div class="list-item" v-for="(item,index) in keyWords" :key="index">
+                        <span>{{ item }}</span>
+                        <span>
+                          <b-button
+                            type="is-danger"
+                            icon-right="delete"
+                            size="is-small"
+                            @click="deleteKeyWord(item,'key')"
+                            class="is-pulled-right"
+                            href
+                          ></b-button>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -106,7 +118,19 @@
                     <p class="title is-4">Fliter Out</p>
 
                     <div class="list is-hoverable">
-                      <a class="list-item" v-for="(item,index) in skipKeys" :key="index">{{ item }}</a>
+                      <div class="list-item" v-for="(item,index) in skipKeys" :key="index">
+                        <span>{{ item }}</span>
+                        <span>
+                          <b-button
+                            type="is-danger"
+                            icon-right="delete"
+                            size="is-small"
+                            @click="deleteKeyWord(item,'skip')"
+                            class="is-pulled-right"
+                            href
+                          ></b-button>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -190,6 +214,10 @@ export default {
           console.log(error);
           // do something
         });
+    },
+
+    deleteKeyWord(item, type) {
+      this.$store.dispatch("userData/deleteKeyOrFilter", {item, type});
     },
 
     ...mapMutations({})

@@ -8,79 +8,44 @@ use Illuminate\Http\Request;
 class searchKeysController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\searchKeys  $searchKeys
-     * @return \Illuminate\Http\Response
-     */
-    public function show(searchKeys $searchKeys)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\searchKeys  $searchKeys
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(searchKeys $searchKeys)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\searchKeys  $searchKeys
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, searchKeys $searchKeys)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\searchKeys  $searchKeys
      * @return \Illuminate\Http\Response
      */
-    public function destroy(searchKeys $searchKeys)
+    public function destroy(Request $request, $id)
     {
         //
+
+        $data = request()->validate([
+            'item' => 'required',
+            'type' => 'required'
+        ]);
+
+        $column = 'keys';
+        if ($data['type'] === 'skip') {
+            $column = 'skip_keys';
+        }
+
+
+        $arrayToUpdate = searchKeys::where([
+            ['user_id', auth()->user()->id],
+            ['destination_details_id', $id]
+        ])->select($column)->get()[0][$column];
+
+        $arrayToUpdate = preg_replace("/(\[)|(\])/", "", $arrayToUpdate);
+        $arrayToUpdate = explode(",", $arrayToUpdate);
+        $pos = array_search($data['item'], $arrayToUpdate);
+        unset($arrayToUpdate[$pos]);
+        
+        $arrayToUpdate = '[' . implode(",",$arrayToUpdate) . ']';
+
+        searchKeys::where([
+            ['user_id', auth()->user()->id],
+            ['destination_details_id', $id]
+        ])->update([$column => $arrayToUpdate]);
+
+        return $arrayToUpdate;
+        
     }
 }

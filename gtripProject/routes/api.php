@@ -29,8 +29,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/user/destinationdata', 'DestinationDetailsController@show');
     Route::post('/user/destinationdata', 'DestinationDetailsController@store');
     Route::delete('/user/destinationdata/{id}', 'DestinationDetailsController@destroy');
-
     Route::get('/user/destinationdata/{id}', 'DestinationDetailsController@singleItem');
-
     Route::post('/user/destinationdata/{id}/enableddisable',  'DestinationDetailsController@enableDisableDestination');
+    
+    Route::post('/user/destinationdata/{id}/destroykey',  'searchKeysController@destroy');
+    
 });

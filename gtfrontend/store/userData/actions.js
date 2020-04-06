@@ -8,6 +8,7 @@ export default {
   getSingleDestination(context, payload) {
     return this.$axios.get("/user/destinationdata/" + payload)
       .then(data => {
+        context.commit('setSingleDestination', data.data[0])
         return data.data;
       }).catch(error => {
         return Promise.reject(error);
@@ -44,5 +45,17 @@ export default {
     }).catch(error => {
       return Promise.reject(error);
     });
+  },
+
+  deleteKeyOrFilter(context, payload) {
+    console.log(payload);
+    this.$axios.post("/user/destinationdata/" + context.state.selectedDestination.id + "/destroykey",
+      payload).then(data => {
+      console.log(data);
+    }).catch(err => {
+      console.log(err);
+    });
+
+    console.log(payload)
   }
 }
