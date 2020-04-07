@@ -38,7 +38,7 @@ class searchKeysController extends Controller
         $pos = array_search($data['item'], $arrayToUpdate);
         unset($arrayToUpdate[$pos]);
         
-        $arrayToUpdate = '[' . implode(",",$arrayToUpdate) . ']';
+        $arrayToUpdate = implode(",",$arrayToUpdate);
 
         searchKeys::where([
             ['user_id', auth()->user()->id],

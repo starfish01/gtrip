@@ -63,8 +63,8 @@ class DestinationDetailsController extends Controller
         searchKeys::create([
             'user_id' => $userId,
             'destination_details_id' => $newDestination->id,
-            'keys' => '[]',
-            'skip_keys' => '[]'
+            'keys' => '',
+            'skip_keys' => ''
         ]);
 
         return auth()->user()->singleAccessibleDestinations($newDestination->id);

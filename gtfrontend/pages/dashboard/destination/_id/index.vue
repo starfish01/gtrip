@@ -89,7 +89,11 @@
                   <div class="media-content">
                     <p class="title is-4">Key Words</p>
                     <div class="list is-hoverable">
-                      <div class="list-item" v-for="(item,index) in keyWords" :key="index">
+                      <div
+                        class="list-item"
+                        v-for="(item,index) in destinationData.keys.keys"
+                        :key="index"
+                      >
                         <span>{{ item }}</span>
                         <span>
                           <b-button
@@ -98,9 +102,30 @@
                             size="is-small"
                             @click="deleteKeyWord(item,'key')"
                             class="is-pulled-right"
-                            href
                           ></b-button>
                         </span>
+                      </div>
+                      <div class="list-item">
+                        <template v-if="addKeyInput">
+                          <b-input v-model="keyToBeAdded" class="addInput"></b-input>
+                          <b-button
+                            type="is-danger"
+                            icon-right="delete"
+                            size="is-small"
+                            class="is-pulled-right"
+                            style="margin-left: 10px"
+                            @click="cancellingAddingKey()"
+                          ></b-button>
+                          <b-button
+                            class="is-pulled-right"
+                            size="is-small"
+                            type="is-primary"
+                            icon-right="plus"
+                          />
+                        </template>
+                        <template v-if="!addKeyInput">
+                          <b-button @click="addKeyInput = !addKeyInput">Add Item</b-button>
+                        </template>
                       </div>
                     </div>
                   </div>
@@ -118,7 +143,11 @@
                     <p class="title is-4">Fliter Out</p>
 
                     <div class="list is-hoverable">
-                      <div class="list-item" v-for="(item,index) in skipKeys" :key="index">
+                      <div
+                        class="list-item"
+                        v-for="(item,index) in destinationData.keys.skipKeys"
+                        :key="index"
+                      >
                         <span>{{ item }}</span>
                         <span>
                           <b-button
@@ -130,6 +159,28 @@
                             href
                           ></b-button>
                         </span>
+                      </div>
+                      <div class="list-item">
+                        <template v-if="addSkipKeyInput">
+                          <b-input v-model="skipKeyToBeAdded" class="addInput"></b-input>
+                          <b-button
+                            type="is-danger"
+                            icon-right="delete"
+                            size="is-small"
+                            class="is-pulled-right"
+                            style="margin-left: 10px"
+                            @click="cancellingAddingSkipKey()"
+                          ></b-button>
+                          <b-button
+                            class="is-pulled-right"
+                            size="is-small"
+                            type="is-primary"
+                            icon-right="plus"
+                          />
+                        </template>
+                        <template v-if="!addSkipKeyInput">
+                          <b-button @click="addSkipKeyInput = !addSkipKeyInput">Add Item</b-button>
+                        </template>
                       </div>
                     </div>
                   </div>
@@ -192,12 +243,13 @@ export default {
   middleware: "auth",
   data() {
     return {
-      destinationData: null,
       isLoading: true,
       error: null,
       isComponentModalActive: false,
-      keyWords: null,
-      skipKeys: null
+      addKeyInput: false,
+      keyToBeAdded: "",
+      addSkipKeyInput: false,
+      skipKeyToBeAdded: ""
     };
   },
   methods: {
@@ -217,13 +269,23 @@ export default {
     },
 
     deleteKeyWord(item, type) {
-      this.$store.dispatch("userData/deleteKeyOrFilter", {item, type});
+      this.$store.dispatch("userData/deleteKeyOrFilter", { item, type });
+    },
+    cancellingAddingKey() {
+      this.addKeyInput = false;
+      this.keyToBeAdded = "";
+    },
+    cancellingAddingSkipKey() {
+      this.addSkipKeyInput = false;
+      this.skipKeyToBeAdded = "";
     },
 
     ...mapMutations({})
   },
   computed: {
-    ...mapGetters({})
+    ...mapGetters({
+      destinationData: "userData/getSingleDestinationData"
+    })
   },
   created() {
     if (!this.$route.params.id) {
@@ -233,18 +295,17 @@ export default {
       .dispatch("userData/getSingleDestination", this.$route.params.id)
       .then(data => {
         this.isLoading = false;
-        this.destinationData = data[0];
-
-        this.keyWords = data[0].keys.keys.replace(/[\[\]']+/g, "").split(",");
-        this.skipKeys = data[0].keys.skip_keys
-          .replace(/[\[\]']+/g, "")
-          .split(",");
       })
       .catch(error => {
         this.isLoading = false;
         this.error = error;
-        // console.log(error);
       });
   }
 };
 </script>
+<style lang="scss" scoped>
+.addInput {
+  width: 70%;
+  display: inline-block;
+}
+</style>

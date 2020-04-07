@@ -7,7 +7,7 @@ export default {
 
   getSingleDestination(context, payload) {
     return this.$axios.get("/user/destinationdata/" + payload)
-      .then(data => {
+      .then(data => {        
         context.commit('setSingleDestination', data.data[0])
         return data.data;
       }).catch(error => {
@@ -48,14 +48,11 @@ export default {
   },
 
   deleteKeyOrFilter(context, payload) {
-    console.log(payload);
     this.$axios.post("/user/destinationdata/" + context.state.selectedDestination.id + "/destroykey",
       payload).then(data => {
-      console.log(data);
+        context.commit('updateKeys', {newData: data, keyType: payload.type, id: context.state.selectedDestination.id});
     }).catch(err => {
       console.log(err);
     });
-
-    console.log(payload)
   }
 }
