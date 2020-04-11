@@ -56,7 +56,8 @@ class GumTreeRipperController extends Controller
                 'distance' => $item['distance'],
                 'suburb' => $item['suburb'],
                 'filtered_out' =>  $item['filtered_out'],
-                'user_id' =>  $item['user_id']
+                'user_id' =>  $item['user_id'],
+                'destination_details_id' => $item['destination_details_id']
             ]);
         }
     }
@@ -112,22 +113,30 @@ class GumTreeRipperController extends Controller
         $itemsToSearch = DestinationDetails::where('enabled', true)->get();
 
         foreach ($itemsToSearch as $item) {
-            $this->getGumtreeData($item['url'], json_decode($item['keys']['keys']),  json_decode($item['keys']['skip_keys']), $item['user_id']);
+
+            $keys = $item['keys']['keys'] ? explode(",",$item['keys']['keys']) : [];
+            $skip_keys = $item['keys']['skip_keys'] ? explode(",",$item['keys']['skip_keys']) : [];
+            $this->getGumtreeData($item['url'], $keys,  $skip_keys, $item['user_id'], $item['id']);
         }
     }
 
-    public function getGumtreeData($url, $products, $filterOut, $userId)
+    public function getGumtreeData($url, $products, $filterOut, $userId, $destination_details_id)
     {
 
         $listItems = [];
         $foundItems = [];
 
         $client = new Client();
-        // Go to the symfony.com website
+        
         $crawler = $client->request('GET', $url);
 
+        $dataToUse = [
+            'uid' => $userId,
+            'did' => $destination_details_id
+        ];
+
         // Creates an array of item titles
-        $listItems[] = $crawler->filter('.user-ad-row')->each(function ($node, $i) use (&$userId) {
+        $listItems[] = $crawler->filter('.user-ad-row')->each(function ($node, $i) use (&$dataToUse) {
 
             // convert time possible results = yesterday hours minutes an actual date
             $dateOfCreation = $this->getDate($node->filter('.user-ad-row__age')->text());
@@ -142,7 +151,9 @@ class GumTreeRipperController extends Controller
             $item['distance'] = $node->filter('.user-ad-row__location .user-ad-row__distance')->text();
             $item['suburb'] = str_replace($item['distance'], '', str_replace($item['location'], '', $node->filter('.user-ad-row__location')->text()));
             $item['filtered_out'] = false;
-            $item['user_id'] = $userId;
+            $item['user_id'] = $dataToUse['uid'];
+            $item['destination_details_id'] = $dataToUse['did'];
+            
             return $item;
         });
 
@@ -166,10 +177,14 @@ class GumTreeRipperController extends Controller
     {
         $returnItems = [];
 
+        if (!count($filterOut)) {
+            return $foundItems;
+        }
+
         // Loop though items and search for key items
         foreach ($foundItems as $item) {
             foreach ($filterOut as $searchingFor) {
-                if (strpos(strtolower($item['title']), $searchingFor) !== false) {
+                if (strpos(strtolower($item['title']), strtolower($searchingFor)) !== false) {
                     $item['filtered_out'] = true;
                 }
                 $returnItems[] = $item;
@@ -186,7 +201,7 @@ class GumTreeRipperController extends Controller
         // Loop though items and search for key items
         foreach ($listItems as $item) {
             foreach ($products as $searchingFor) {
-                if (strpos(strtolower($item['title']), $searchingFor) !== false) {
+                if (strpos(strtolower($item['title']), strtolower($searchingFor)) !== false) {
                     if (!GumTreeRipper::where('item_id', '=', $item['id'])->exists()) {
                         $returnFound[] = $item;
                     }
@@ -241,8 +256,6 @@ class GumTreeRipperController extends Controller
                 ]
             ]
         ];
-
-        var_dump('blah');
 
         $response = $mj->post(Resources::$Email, ['body' => $body]);
         // Read the response

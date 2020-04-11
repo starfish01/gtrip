@@ -55,21 +55,6 @@
                 </div>
 
                 <div class="content">
-                  <template v-if="addDestination">
-                    <b-field label="title">
-                      <b-input v-model="newdestination.title"></b-input>
-                    </b-field>
-                    <b-field label="URL">
-                      <b-input v-model="newdestination.url"></b-input>
-                    </b-field>
-                    <b-button :disabled="!newdestination.title.length || !newdestination.url.length" class="mb-5" @click="addDestinationSaveBtn()">Save</b-button>
-                    <b-loading :is-full-page="false" :active.sync="isLoadingNewDestination"></b-loading>
-                  </template>
-
-                  <b-button class="mb-5" @click="addDestinationBtn()">
-                    <span v-if="addDestination">Cancel</span>
-                    <span v-else>Add Destination +</span>
-                  </b-button>
 
                   <div class="list is-hoverable">
                     <a
@@ -77,8 +62,26 @@
                       v-for="item in destinationData"
                       :key="item.id"
                       :href="'/dashboard/destination/'+item.id"
-                    >{{ item.title }}</a>
+                    >{{ item.title }} - {{item.enabled ? 'Enabled' : 'Disabled'}}</a>
                   </div>
+                  <template v-if="addDestination">
+                    <b-field label="title">
+                      <b-input v-model="newdestination.title"></b-input>
+                    </b-field>
+                    <b-field label="URL">
+                      <b-input v-model="newdestination.url"></b-input>
+                    </b-field>
+                    <b-button
+                      :disabled="!newdestination.title.length || !newdestination.url.length"
+                      class="mb-5"
+                      @click="addDestinationSaveBtn()"
+                    >Save</b-button>
+                    <b-loading :is-full-page="false" :active.sync="isLoadingNewDestination"></b-loading>
+                  </template>
+                  <b-button class="mb-5" @click="addDestinationBtn()">
+                    <span v-if="addDestination">Cancel</span>
+                    <span v-else>Add Destination +</span>
+                  </b-button>
                 </div>
               </div>
             </div>
@@ -129,7 +132,7 @@ export default {
           this.addDestinationBtn();
           this.isLoadingNewDestination = false;
           this.$buefy.toast.open({
-            message: 'An Error Occured unable to save new destination',
+            message: "An Error Occured unable to save new destination",
             type: "is-danger"
           });
         });

@@ -34,4 +34,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     
     Route::post('/user/destinationdata/{id}/destroykey',  'searchKeysController@destroy');
     
+    Route::post('/user/destinationdata/{id}/addkey',  'searchKeysController@addKey');
+
 });

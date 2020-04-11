@@ -106,7 +106,8 @@
                         </span>
                       </div>
                       <div class="list-item">
-                        <template v-if="addKeyInput">
+                        <template v-if="keyToBeAddedLoading">Saving...</template>
+                        <template v-if="addKeyInput && !keyToBeAddedLoading">
                           <b-input v-model="keyToBeAdded" class="addInput"></b-input>
                           <b-button
                             type="is-danger"
@@ -121,6 +122,7 @@
                             size="is-small"
                             type="is-primary"
                             icon-right="plus"
+                            @click="addKeyWord(keyToBeAdded, 'key')"
                           />
                         </template>
                         <template v-if="!addKeyInput">
@@ -141,7 +143,6 @@
                 <div class="media">
                   <div class="media-content">
                     <p class="title is-4">Fliter Out</p>
-
                     <div class="list is-hoverable">
                       <div
                         class="list-item"
@@ -161,7 +162,8 @@
                         </span>
                       </div>
                       <div class="list-item">
-                        <template v-if="addSkipKeyInput">
+                        <template v-if="skipKeyToBeAddedLoading">Saving...</template>
+                        <template v-if="addSkipKeyInput && !skipKeyToBeAddedLoading">
                           <b-input v-model="skipKeyToBeAdded" class="addInput"></b-input>
                           <b-button
                             type="is-danger"
@@ -176,6 +178,7 @@
                             size="is-small"
                             type="is-primary"
                             icon-right="plus"
+                            @click="addKeyWord(skipKeyToBeAdded, 'skip')"
                           />
                         </template>
                         <template v-if="!addSkipKeyInput">
@@ -248,8 +251,10 @@ export default {
       isComponentModalActive: false,
       addKeyInput: false,
       keyToBeAdded: "",
+      keyToBeAddedLoading: false,
       addSkipKeyInput: false,
-      skipKeyToBeAdded: ""
+      skipKeyToBeAdded: "",
+      skipKeyToBeAddedLoading: false
     };
   },
   methods: {
@@ -266,6 +271,42 @@ export default {
           console.log(error);
           // do something
         });
+    },
+
+    addKeyWord(data, type) {
+      if (!data) {
+        alert("Please enter something..");
+        return;
+      }
+      if (data.indexOf(" ") >= 0) {
+        alert("No spaces");
+        return;
+      }
+      this.addingKeyLoading(type);
+
+      this.$store
+        .dispatch("userData/saveKeyword", { key: data, type: type })
+        .then(data => {
+          this.addingKeyLoading(type);
+        })
+        .catch(error => {
+          this.addingKeyLoading(type);
+          this.error = error;
+        });
+    },
+
+    addingKeyLoading(type) {
+      if (type === "key") {
+        this.keyToBeAddedLoading = !this.keyToBeAddedLoading;
+        if (!this.keyToBeAddedLoading) {
+          this.cancellingAddingKey();
+        }
+      } else {
+        this.skipKeyToBeAddedLoading = !this.skipKeyToBeAddedLoading;
+        if (!this.skipKeyToBeAddedLoading) {
+          this.cancellingAddingSkipKey();
+        }
+      }
     },
 
     deleteKeyWord(item, type) {

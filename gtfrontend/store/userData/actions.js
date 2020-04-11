@@ -7,7 +7,7 @@ export default {
 
   getSingleDestination(context, payload) {
     return this.$axios.get("/user/destinationdata/" + payload)
-      .then(data => {        
+      .then(data => {
         context.commit('setSingleDestination', data.data[0])
         return data.data;
       }).catch(error => {
@@ -50,9 +50,31 @@ export default {
   deleteKeyOrFilter(context, payload) {
     this.$axios.post("/user/destinationdata/" + context.state.selectedDestination.id + "/destroykey",
       payload).then(data => {
-        context.commit('updateKeys', {newData: data, keyType: payload.type, id: context.state.selectedDestination.id});
+      context.commit('updateKeys', {
+        newData: data,
+        keyType: payload.type,
+        id: context.state.selectedDestination.id
+      });
+    }).catch(err => {
+      console.log(err);
+    });
+  },
+
+
+  saveKeyword(context, payload) {
+    this.$axios.post("/user/destinationdata/" + context.state.selectedDestination.id + "/addkey",
+      payload).then(data => {
+      console.log(data);
+      console.log(payload.type);
+      context.commit('updateKeys', {
+        newData: data,
+        keyType: payload.type,
+        id: context.state.selectedDestination.id
+      });
+    
     }).catch(err => {
       console.log(err);
     });
   }
+
 }
