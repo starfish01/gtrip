@@ -28,16 +28,6 @@ class GumTreeRipperController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -62,51 +52,6 @@ class GumTreeRipperController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\GumTreeRipper  $gumTreeRipper
-     * @return \Illuminate\Http\Response
-     */
-    public function show(GumTreeRipper $gumTreeRipper)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\GumTreeRipper  $gumTreeRipper
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(GumTreeRipper $gumTreeRipper)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\GumTreeRipper  $gumTreeRipper
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, GumTreeRipper $gumTreeRipper)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\GumTreeRipper  $gumTreeRipper
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(GumTreeRipper $gumTreeRipper)
-    {
-        //
-    }
-
     public function capture()
     {
 
@@ -114,8 +59,8 @@ class GumTreeRipperController extends Controller
 
         foreach ($itemsToSearch as $item) {
 
-            $keys = $item['keys']['keys'] ? explode(",",$item['keys']['keys']) : [];
-            $skip_keys = $item['keys']['skip_keys'] ? explode(",",$item['keys']['skip_keys']) : [];
+            $keys = $item['keys']['keys'] ? explode(",", $item['keys']['keys']) : [];
+            $skip_keys = $item['keys']['skip_keys'] ? explode(",", $item['keys']['skip_keys']) : [];
             $this->getGumtreeData($item['url'], $keys,  $skip_keys, $item['user_id'], $item['id']);
         }
     }
@@ -127,7 +72,7 @@ class GumTreeRipperController extends Controller
         $foundItems = [];
 
         $client = new Client();
-        
+
         $crawler = $client->request('GET', $url);
 
         $dataToUse = [
@@ -153,7 +98,7 @@ class GumTreeRipperController extends Controller
             $item['filtered_out'] = false;
             $item['user_id'] = $dataToUse['uid'];
             $item['destination_details_id'] = $dataToUse['did'];
-            
+
             return $item;
         });
 
@@ -198,12 +143,20 @@ class GumTreeRipperController extends Controller
     {
         $returnFound = [];
 
-        // Loop though items and search for key items
-        foreach ($listItems as $item) {
-            foreach ($products as $searchingFor) {
-                if (strpos(strtolower($item['title']), strtolower($searchingFor)) !== false) {
-                    if (!GumTreeRipper::where('item_id', '=', $item['id'])->exists()) {
-                        $returnFound[] = $item;
+        if (!count($products)) {
+            foreach ($listItems as $item) {
+                if (!GumTreeRipper::where('item_id', '=', $item['id'])->exists()) {
+                    $returnFound[] = $item;
+                }
+            }
+        } else {
+            // Loop though items and search for key items
+            foreach ($listItems as $item) {
+                foreach ($products as $searchingFor) {
+                    if (strpos(strtolower($item['title']), strtolower($searchingFor)) !== false) {
+                        if (!GumTreeRipper::where('item_id', '=', $item['id'])->exists()) {
+                            $returnFound[] = $item;
+                        }
                     }
                 }
             }

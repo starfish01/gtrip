@@ -216,7 +216,7 @@
 
                       <tr v-for="item in destinationData.found_items" :key="item.id">
                         <td>
-                          <a :href="item.url" target="_blank">{{item.title}}</a>
+                          <a :href="'https://www.gumtree.com.au' + item.url" target="_blank">{{item.title}}</a>
                         </td>
                         <td>{{item.email_sent ? 'yes' : 'no'}}</td>
                         <td>{{item.filtered_out ? 'yes' : 'no'}}</td>
@@ -228,8 +228,6 @@
                     </table>
                   </div>
                 </div>
-
-                <div class="content"></div>
               </div>
             </div>
           </div>
