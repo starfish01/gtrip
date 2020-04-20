@@ -243,7 +243,7 @@ class GumTreeRipperController extends Controller
                 [
                     'From' => [
                         'Email' => "mailer@mail.patricklabes.com.au",
-                        'Name' => "Mailer"
+                        'Name' => 'Gumtree - ' . $itemsToEmail[0]['title']
                     ],
                     'To' => [
                         [
@@ -251,7 +251,7 @@ class GumTreeRipperController extends Controller
                             'Name' => "Patrick Labes"
                         ]
                     ],
-                    'Subject' => "Deals Found",
+                    'Subject' => "Deals Found - " . $item['distance'],
                     'HTMLPart' => $message,
                 ]
             ]
@@ -267,19 +267,19 @@ class GumTreeRipperController extends Controller
     public function getDate(String $date)
     {
         date_default_timezone_set('Australia/Brisbane');
-        $currentTime = date("d/m/y H:i");
+        $currentTime = date('Y-m-d H:i');
 
         // check for minute
         if (strpos($date, 'minutes')) {
             $minutesToRemove = explode(' ', trim($date))[0];
-            $returnTime = date('d/m/y H:i', strtotime('-' . $minutesToRemove . ' minutes', strtotime($currentTime)));
+            $returnTime = date('Y-m-d H:i', strtotime('-' . $minutesToRemove . ' minutes', strtotime($currentTime)));
             return $returnTime;
         } else if (strpos($date, 'hour')) {
             $hoursToRemove = explode(' ', trim($date))[0];
-            $returnTime = date('d/m/y H:i', strtotime('-' . $hoursToRemove . ' hour', strtotime($currentTime)));
+            $returnTime = date('Y-m-d H:i', strtotime('-' . $hoursToRemove . ' hour', strtotime($currentTime)));
             return $returnTime;
         } else if (strpos($date, 'yesterday')) {
-            $returnTime = date('d/m/y H:i', strtotime('-1 day', strtotime($currentTime)));
+            $returnTime = date('Y-m-d H:i', strtotime('-1 day', strtotime($currentTime)));
             return $returnTime;
         } else {
             // its a date
