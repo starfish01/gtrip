@@ -183,7 +183,7 @@ class GumTreeRipperController extends Controller
             $url = 'https://www.gumtree.com.au' . $item['url'];
 
             $message .= '<p>' . "<a href='" . $url . "' target='_blank'>" . $item['title'] . '</a></p>';
-            $message .= '<p>Created at:' . $item['createdAt'] . '</p>';
+            $message .= '<p>Created at: ' . $item['createdAt'] . '</p>';
             $message .= '<p>' . $item['location'] . '</p>';
             $message .= '<p>' . $item['distance'] . '</p>';
             $message .= '<p>' . $item['suburb'] . '</p>';
